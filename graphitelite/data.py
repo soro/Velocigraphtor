@@ -3,11 +3,15 @@ import struct
 import time
 
 from graphitelite.storage import STORE, LOCAL_STORE
+from graphitelite.config import config
 
 try:
   import cPickle as pickle
 except ImportError:
   import pickle
+
+CARBONLINK_HOSTS = config.get('main').get('carbon_link_hosts')
+CARBONLINK_TIMEOUT = config.get('main').get('carbon_link_time_out')
 
 class TimeSeries(list):
   def __init__(self, name, start, end, step, values, consolidate='average'):
@@ -78,6 +82,7 @@ class CarbonLinkPool:
     #parse hosts from local_settings.py
     hosts = []
     for host in CARBONLINK_HOSTS:
+      print host
       parts = host.split(':')
       server = parts[0]
       port = int( parts[1] )

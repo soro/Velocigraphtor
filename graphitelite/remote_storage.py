@@ -33,7 +33,7 @@ cache = SimpleCache(300)
 
 class RemoteStore(object):
   lastFailure = 0.0
-  retryDelay = config.get('remote', 'remote_store_retry_delay')
+  retryDelay = config.get('remote').get('remote_store_retry_delay')
   available = property(lambda self: time.time() - self.lastFailure > self.retryDelay)
 
   def __init__(self, host):
@@ -68,7 +68,7 @@ class FindRequest:
       return
 
     self.connection = HTTPConnectionWithTimeout(self.store.host)
-    self.connection.timeout = config.get('remote', 'remote_store_find_timeout')
+    self.connection.timeout = config.get('remote').get('remote_store_find_timeout')
 
     query_params = [
       ('local', '1'),
@@ -137,7 +137,7 @@ class RemoteNode:
     query_string = urlencode(query_params)
 
     connection = HTTPConnectionWithTimeout(self.store.host)
-    connection.timeout = config.get('remote', 'remote_store_fetch_timeout')
+    connection.timeout = config.get('remote').get('remote_store_fetch_timeout')
     connection.request('GET', '/?' + query_string)
     response = connection.getresponse()
     assert response.status == 200, "Failed to retrieve remote data: %d %s" % (response.status, response.reason)

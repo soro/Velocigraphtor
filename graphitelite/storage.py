@@ -365,5 +365,8 @@ class RRDDataSource(Leaf):
 
 
 # Exposed Storage API
-LOCAL_STORE = Store(config.get('storage', 'data_dirs'))
-STORE = Store(config.get('storage', 'data_dirs'), remote_hosts=config.get('remote', 'cluster_servers'))
+LOCAL_STORE = Store(config.get('storage').get('data_dirs'))
+if config.get('remote').get('cluster_servers'):
+  STORE = Store(config.get('storage').get('data_dirs'), remote_hosts=config.get('remote').get('cluster_servers'))
+else:
+  STORE = None
