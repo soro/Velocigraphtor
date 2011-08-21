@@ -18,10 +18,6 @@ try:
 except ImportError:
   import pickle
 
-# Exposed Storage API
-LOCAL_STORE = Store(settings.DATA_DIRS)
-STORE = Store(settings.DATA_DIRS, remote_hosts=settings.CLUSTER_SERVERS)
-
 
 DATASOURCE_DELIMETER = '::RRD_DATASOURCE::'
 
@@ -367,4 +363,6 @@ class RRDDataSource(Leaf):
     return (timeInfo,values)
 
 
-
+# Exposed Storage API
+LOCAL_STORE = Store(settings.DATA_DIRS)
+STORE = Store(settings.DATA_DIRS, remote_hosts=settings.CLUSTER_SERVERS)

@@ -4,6 +4,8 @@ import httplib
 from urllib import urlencode
 from graphitelite.hashing import compactHash
 
+from graphitelite.config import config
+
 try:
   import cPickle as pickle
 except ImportError:
@@ -17,7 +19,7 @@ class SimpleCache(object):
 
   def __getitem__(self, key):
     val = self.cache.get(key)
-    if val && (time.time() - val['expiry'] < self.cache_duration):
+    if val and (time.time() - val['expiry'] < self.cache_duration):
       return val['value']
     else:
       return None
@@ -31,7 +33,7 @@ cache = SimpleCache(300)
 
 class RemoteStore(object):
   lastFailure = 0.0
-  retryDelay = settings.REMOTE_STORE_RETRY_DELAY
+  retryDelay = config.get('remote', 'remote_store_retry_delay')
   available = property(lambda self: time.time() - self.lastFailure > self.retryDelay)
 
   def __init__(self, host):
@@ -66,7 +68,7 @@ class FindRequest:
       return
 
     self.connection = HTTPConnectionWithTimeout(self.store.host)
-    self.connection.timeout = settings.REMOTE_STORE_FIND_TIMEOUT
+    self.connection.timeout = config.get('remote', 'remote_store_find_timeout')
 
     query_params = [
       ('local', '1'),
@@ -135,8 +137,8 @@ class RemoteNode:
     query_string = urlencode(query_params)
 
     connection = HTTPConnectionWithTimeout(self.store.host)
-    connection.timeout = settings.REMOTE_STORE_FETCH_TIMEOUT
-    connection.request('GET', '/render/?' + query_string)
+    connection.timeout = config.get('remote', 'remote_store_fetch_timeout')
+    connection.request('GET', '/?' + query_string)
     response = connection.getresponse()
     assert response.status == 200, "Failed to retrieve remote data: %d %s" % (response.status, response.reason)
     rawData = response.read()

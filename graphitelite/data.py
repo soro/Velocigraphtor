@@ -2,7 +2,7 @@ import socket
 import struct
 import time
 
-from graphitelite.storage import LOCAL_STORE, STORE
+from graphitelite.storage import STORE, LOCAL_STORE
 
 try:
   import cPickle as pickle
