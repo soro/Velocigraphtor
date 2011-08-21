@@ -2,6 +2,8 @@ import socket
 import struct
 import time
 
+from graphitelite.storage import LOCAL_STORE, STORE
+
 try:
   import cPickle as pickle
 except ImportError:
