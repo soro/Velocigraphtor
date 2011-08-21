@@ -2,6 +2,7 @@ import os, time, fnmatch, socket, errno
 from os.path import isdir, isfile, join, exists, splitext, basename, realpath
 import whisper
 from graphitelite.remote_storage import RemoteStore
+from graphitelite.config import config
 
 try:
   import rrdtool
@@ -364,5 +365,5 @@ class RRDDataSource(Leaf):
 
 
 # Exposed Storage API
-LOCAL_STORE = Store(settings.DATA_DIRS)
-STORE = Store(settings.DATA_DIRS, remote_hosts=settings.CLUSTER_SERVERS)
+LOCAL_STORE = Store(config.get('storage', 'data_dirs'))
+STORE = Store(config.get('storage', 'data_dirs'), remote_hosts=config.get('remote', 'cluster_servers'))
