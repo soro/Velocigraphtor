@@ -12,4 +12,10 @@
     "remote_store_find_timeout": 10,
     "cluster_servers": []
   }
+  "logging": {
+    "log_dir": "logs",
+    "log_cache_performance": false,
+    "log_rendering_performance": false,
+    "log_metric_access": false
+  }
 }
