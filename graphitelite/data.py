@@ -4,6 +4,7 @@ import time
 
 from graphitelite.storage import STORE, LOCAL_STORE
 from graphitelite.config import config
+from graphitelite.hashing import ConsistentHashRing
 
 try:
   import cPickle as pickle
