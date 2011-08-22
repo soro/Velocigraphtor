@@ -6,4 +6,4 @@ dist/
 .#*
 #*
 ~*
-conf/app.json
+config/app.json
