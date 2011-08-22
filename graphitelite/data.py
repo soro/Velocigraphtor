@@ -5,6 +5,7 @@ import time
 from graphitelite.storage import STORE, LOCAL_STORE
 from graphitelite.config import config
 from graphitelite.hashing import ConsistentHashRing
+from graphitelite.log import log
 
 try:
   import cPickle as pickle
@@ -83,7 +84,6 @@ class CarbonLinkPool:
     #parse hosts from local_settings.py
     hosts = []
     for host in CARBONLINK_HOSTS:
-      print host
       parts = host.split(':')
       server = parts[0]
       port = int( parts[1] )

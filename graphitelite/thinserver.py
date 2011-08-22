@@ -2,6 +2,7 @@ import socket
 import struct
 import time
 import bisect
+import inspect
 
 from md5 import md5
 from twisted.web import server, resource
@@ -9,6 +10,7 @@ from twisted.internet import reactor
 
 from graphitelite.data import TimeSeries, fetchData
 from graphitelite.config import config
+from graphitelite.log import log
 
 try:
   import cPickle as pickle
@@ -34,15 +36,14 @@ except ImportError:
 
 
 import bottle
-from bottle import route, run
-from werkzeug.debug import DebuggedApplication
+from bottle import response, request, route, run
 
-@route('/:start/:end')
-def index(start='', end=''):
-    data = fetchData({'start': [start], 'end': [end]}, '/Users/soeren/code/python/graphite/storage')
-    return str(data)
+@route('/metrics/:path')
+def show_metrics(path):
+  # This is really brittle; if you ask for something out of range of the files, it'll 500 :(
+  data = fetchData({'start': [int(request.params.get('start'))], 'end': [int(request.params.get('end'))]}, path)
+  response.content_type = "application/json"
+  return {"data": map(lambda datum: datum.getInfo(), data)}
 
 app = bottle.app()
-app.catchall = False #Now most exceptions are re-raised within bottle.
-myapp = DebuggedApplication(app) #Replace this with a middleware of your choice (see below)
-run(app=myapp, host='localhost', port=8080)
+run(app, host='localhost', port=8080)
