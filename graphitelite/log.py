@@ -25,11 +25,11 @@ class GraphiteLogger:
     log_settings = config.get('logging')
 
     #Setup log files
-    self.infoLogFile = os.path.join(log_settings.log_dir,"info.log")
-    self.exceptionLogFile = os.path.join(log_settings.log_dir,"exception.log")
-    self.cacheLogFile = os.path.join(log_settings.log_dir,"cache.log")
-    self.renderingLogFile = os.path.join(log_settings.log_dir,"rendering.log")
-    self.metricAccessLogFile = os.path.join(log_settings.log_dir,"metricaccess.log")
+    self.infoLogFile = os.path.join(log_settings.get('log_dir'),"info.log")
+    self.exceptionLogFile = os.path.join(log_settings.get('log_dir'),"exception.log")
+    self.cacheLogFile = os.path.join(log_settings.get('log_dir'),"cache.log")
+    self.renderingLogFile = os.path.join(log_settings.get('log_dir'),"rendering.log")
+    self.metricAccessLogFile = os.path.join(log_settings.get('log_dir'),"metricaccess.log")
 
     #Setup loggers
     self.infoLogger = logging.getLogger("info")
@@ -50,17 +50,17 @@ class GraphiteLogger:
     self.exceptionHandler.setFormatter(self.formatter)
     self.exceptionLogger.addHandler(self.exceptionHandler)
 
-    if log_settings.log_cache_performance:
+    if log_settings.get('log_cache_performance'):
       self.cacheHandler = Rotater(self.cacheLogFile,when="midnight",backupCount=1)
       self.cacheHandler.setFormatter(self.formatter)
       self.cacheLogger.addHandler(self.cacheHandler)
 
-    if log_settings.log_rendering_performance:
+    if log_settings.get('log_rendering_performance'):
       self.renderingHandler = Rotater(self.renderingLogFile,when="midnight",backupCount=1)
       self.renderingHandler.setFormatter(self.formatter)
       self.renderingLogger.addHandler(self.renderingHandler)
 
-    if log_settings.log_metric_access:
+    if log_settings.get('log_metric_access'):
       self.metricAccessHandler = Rotater(self.metricAccessLogFile,when="midnight",backupCount=10)
       self.metricAccessHandler.setFormatter(self.formatter)
       self.metricAccessLogger.addHandler(self.metricAccessHandler)

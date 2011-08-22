@@ -134,7 +134,7 @@ class CarbonLinkPool:
     request = dict(type='cache-query', metric=metric)
     results = self.send_request(request)
     log.cache("CarbonLink cache-query request for %s returned %d datapoints" % (metric, len(results)))
-    return results['datapoints']
+    return results
 
   def get_metadata(self, metric, key):
     request = dict(type='get-metadata', metric=metric, key=key)
@@ -205,10 +205,9 @@ def fetchData(request_args, pathExpr):
     store = STORE
 
   for dbFile in store.find(pathExpr):
-    print str(dbFile)
     log.metric_access(dbFile.metric_path)
     cachedResults = CarbonLink.query(dbFile.real_metric)
-    dbResults = dbFile.fetch( timestamp(startTime), timestamp(endTime) )
+    dbResults = dbFile.fetch(startTime, endTime)
     results = mergeResults(dbResults, cachedResults)
 
     if not results:
@@ -243,7 +242,3 @@ def mergeResults(dbResults, cacheResults):
       pass
 
   return (timeInfo,values)
-
-def timestamp(datetime):
-  "Convert a datetime object into epoch time"
-  return time.mktime( datetime.timetuple() )

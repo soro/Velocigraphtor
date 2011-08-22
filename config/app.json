@@ -1,19 +1,19 @@
 {
   "main": {
-    "carbon_link_hosts": ["localhost:2003"],
+    "carbon_link_hosts": ["localhost:7002"],
     "carbon_link_time_out": 10
   },
   "storage": {
-    "data_dirs": ["/Users/patchuser/code/python/graphite/storage"]
+    "data_dirs": ["/opt/graphite/storage/whisper"]
   },
   "remote": {
     "remote_store_retry_delay": 10,
     "remote_store_fetch_timeout": 10,
     "remote_store_find_timeout": 10,
     "cluster_servers": []
-  }
+  },
   "logging": {
-    "log_dir": "logs",
+    "log_dir": "/tmp",
     "log_cache_performance": false,
     "log_rendering_performance": false,
     "log_metric_access": false
