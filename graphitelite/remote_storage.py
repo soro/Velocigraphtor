@@ -78,7 +78,7 @@ class FindRequest:
     query_string = urlencode(query_params)
 
     try:
-      self.connection.request('GET', '/metrics/find/?' + query_string)
+      self.connection.request('GET', '/?' + query_string)
     except:
       self.store.fail()
       if not self.suppressErrors:

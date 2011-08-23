@@ -27,9 +27,10 @@ class Root(resource.Resource):
             end = args.get('end')[0]
         except:
             return "missing arguments"
-        data = fetchData(args, '/Users/soeren/code/python/graphite/storage')
+        data = fetchData({'start': [int(request.params.get('start'))], 'end': [int(request.params.get('end'))]}, path)
         request.setHeader('Content-Type', 'application/json')
-        return str(data)
+        response = '{"data": ' + str(map(lambda datum: datum.getInfo, data)) + '}'
+        return response
 
 site = server.Site(Root())
 reactor.listenTCP(9000, site)
