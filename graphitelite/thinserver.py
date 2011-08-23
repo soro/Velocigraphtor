@@ -27,9 +27,9 @@ class Root(resource.Resource):
             end = args.get('end')[0]
         except:
             return "missing arguments"
-        data = fetchData({'start': [int(request.params.get('start'))], 'end': [int(request.params.get('end'))]}, path)
+        data = fetchData({'start': [int(start)], 'end': [int(end)]}, path)
         request.setHeader('Content-Type', 'application/json')
-        response = '{"data": ' + str(map(lambda datum: datum.getInfo, data)) + '}'
+        response = '{"data": ' + str(map(lambda datum: datum.getInfo(), data)) + '}'
         return response
 
 site = server.Site(Root())
