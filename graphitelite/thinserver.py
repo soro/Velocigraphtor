@@ -39,7 +39,10 @@ class Root(Resource):
     data = fetchData({'start': [int(start)], 'end': [int(end)]}, path)
     request.setHeader('Content-Type', 'application/json')
     response = '{"data": ' + json.dumps(map(lambda datum: datum.getInfo(), data)) + '}'
-    return response
+    if 'callback'in args:
+        return args.get('callback')[0] + '('+ response + ');'
+    else:
+        return response
 
 class Browse(Resource):
   isLeaf = True
@@ -51,7 +54,11 @@ class Browse(Resource):
     except:
       return "missing arguments, please set metric"
     paths = fetchPaths(metric)
-    return json.dumps([{'metric': a.metric_path, 'isLeaf': a.isLeaf()} for a in paths])
+    response = json.dumps([{'metric': a.metric_path, 'isLeaf': a.isLeaf()} for a in paths])
+    if 'callback'in args:
+        return args.get('callback')[0] + '(' + response + ');'
+    else:
+        return response
 
 root = Root()
 root.putChild('browse', Browse())
