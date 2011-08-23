@@ -81,7 +81,7 @@ class TimeSeries(list):
 
 class CarbonLinkPool:
   def __init__(self, timeout):
-    #parse hosts from local_settings.py
+    #parse hosts from app.json
     hosts = []
     for host in CARBONLINK_HOSTS:
       parts = host.split(':')
@@ -190,6 +190,10 @@ def recv_exactly(conn, num_bytes):
 
 #A shared importable singleton
 CarbonLink = CarbonLinkPool(CARBONLINK_TIMEOUT)
+
+def fetchPaths(metric):
+  store = STORE
+  return store.find(metric)
 
 def fetchData(request_args, pathExpr):
   if pathExpr.lower().startswith('graphite.'):
