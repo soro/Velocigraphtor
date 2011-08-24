@@ -39,10 +39,7 @@ class Root(Resource):
     data = fetchData({'start': [int(start)], 'end': [int(end)]}, path)
     request.setHeader('Content-Type', 'application/json')
     response = '{"data": ' + json.dumps(map(lambda datum: datum.getInfo(), data)) + '}'
-    if 'callback'in args:
-        return args.get('callback')[0] + '('+ response + ');'
-    else:
-        return response
+    return response
 
 class Browse(Resource):
   isLeaf = True
